@@ -1,8 +1,15 @@
 const Router = require("express");
+const cors = require('cors')
+const multer = require('multer')
 
 const circuitRouter = Router();
 
 const circuit = require("../model/Circuit");
+
+Router.use(cors()) 
+const upload = multer({
+  dest: './uploads/',
+})
 
 circuitRouter.post("/add", (req, res) => {
   circuit
@@ -46,7 +53,8 @@ circuitRouter.get("/get", (req, res) => {
     });
 });
 
-circuitRouter.put("/update", (req, res) => {
+circuitRouter.put("/upload", upload.array('file'), async (req, res) => {
+  console.log(`Arquivo recebido: ${req.files.length}`);
   circuit
     .update(
       {
