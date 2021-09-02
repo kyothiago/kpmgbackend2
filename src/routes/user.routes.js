@@ -66,4 +66,26 @@ userRouter.delete("/delete/:id", (req, res) => {
     });
 });
 
+router.post("/authenticate", (req, res) =>{
+
+  let login = req.body.usuarioLogin;
+  let password = req.body.usuarioSenha;
+
+  user.findOne({where:{login: login}}).then(user1 => {
+      if(user != undefined){
+          let correct = bcrypt.compareSync(password,user.password);
+          if(correct){
+             res.redirect("/home");
+          }else{
+              res.redirect("/");
+          }
+      }else{
+          res.redirect("/");
+      }
+  });
+});
+
+
+
+
 module.exports = userRouter;
