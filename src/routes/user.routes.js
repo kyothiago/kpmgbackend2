@@ -1,34 +1,24 @@
 const Router = require("express");
-const crypto = require('crypto');
+//const crypto = require('crypto');
 const userRouter = Router();
+const bcrypt = require('bcryptjs');
 
 const user = require("../model/User");
 
-function gerarSalt() {
-  return crypto.randomBytes(16).toString('hex');
-};
-
-
-function sha512(password) {
-  var hash = crypto.createHash('sha512');
-  hash.update(password);
-  var hash = hash.digest('hex');
-  return hash
-};
-
-function gerarSenha(password) {
-  let salt = gerarSalt(16);
-  let senhaESalt = sha512(password, salt);
-  return senhaESalt;
-}
-
 userRouter.post("/add", (req, res) => {
+
+  let password = req.body.password;
+  let email = req.body.email;
+
+  let salt = bcrypt.genSaltSync(10);
+  let hash = bcrypt.hashSync(password, salt);
+
   user
     .create({
       usuarioLogin: req.body.login,
       usuarioNome: req.body.name,
       usuarioEmail: req.body.email,
-      usuarioSenha: gerarSenha(req.body.password),
+      usuarioSenha: hash,
       usuarioCelular: req.body.celular
     })
     .then((dados) => {
