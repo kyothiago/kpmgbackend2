@@ -3,10 +3,10 @@ const axios = require("axios");
 
 function transformarCorrida(objetoApi) {
   return {
-    corridaId: objetoApi.corridaId,
+    corridaRef: objetoApi.corridaId,
     corridaNumero: objetoApi.round,
     corridaNome: objetoApi.raceName,
-    circuitoId: objetoApi.Circuit.circuitId,
+    circuitoRef: objetoApi.Circuit.circuitoRef,
     corridaData: objetoApi.date,
     corridaUrl: objetoApi.url,
     temporadaAno: objetoApi.season,

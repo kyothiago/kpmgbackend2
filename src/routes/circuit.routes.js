@@ -6,11 +6,6 @@ const circuitRouter = Router();
 
 const circuit = require("../model/Circuit");
 
-Router.use(cors()) 
-const upload = multer({
-  dest: './uploads/',
-})
-
 circuitRouter.post("/add", (req, res) => {
   circuit
     .create({
@@ -49,11 +44,11 @@ circuitRouter.get("/get", (req, res) => {
       res.json(dados);
     })
     .catch((erro) => {
-      res.status(400).send("ocorreu um erro");
+      res.status(400).json({message:"ocorreu um erro", erro});
     });
 });
 
-circuitRouter.put("/upload", upload.array('file'), async (req, res) => {
+/* circuitRouter.put("/upload", upload.single('file'), async (req, res) => {
   console.log(`Arquivo recebido: ${req.files.length}`);
   circuit
     .update(
@@ -72,6 +67,6 @@ circuitRouter.put("/upload", upload.array('file'), async (req, res) => {
     .catch(() => {
       res.status(400).send("Ocorreu um erro");
     });
-});
+}); */
 
 module.exports = circuitRouter;

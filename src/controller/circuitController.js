@@ -3,7 +3,7 @@ const axios = require("axios");
 
 function transformarCircuito(objetoApi){
     return ({
-        circuitoId: objetoApi.circuitId,
+        circuitoRef: objetoApi.circuitId,
         circuitoNome: objetoApi.circuitName,
         circuitoLatitude: objetoApi.Location.lat,
         circuitoLongitude: objetoApi.Location.long,

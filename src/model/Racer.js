@@ -38,7 +38,7 @@ const Racer= connection.define('corridas', {
         allowNull: true,
     },
 
-    circuitoId:{
+    circuitoRef:{
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
     },

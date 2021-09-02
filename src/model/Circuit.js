@@ -4,9 +4,10 @@ const connection = require("../database/connection");
 const Circuit = connection.define('circuitos', {
     
     circuitoId:{
-        type: Sequelize.DataTypes.STRING,
+        type: Sequelize.DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
+        autoIncrement: true
     },
 
     circuitoRef:{
