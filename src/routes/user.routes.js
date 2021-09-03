@@ -2,7 +2,6 @@ const Router = require("express");
 //const crypto = require('crypto');
 const userRouter = Router();
 const bcrypt = require('bcryptjs');
-
 const user = require("../model/User");
 
 userRouter.post("/add", (req, res) => {
@@ -66,26 +65,19 @@ userRouter.delete("/delete/:id", (req, res) => {
     });
 });
 
-router.post("/authenticate", (req, res) =>{
+ 
+userRouter.post("/authenticate", (req, res) => { 
 
-  let login = req.body.usuarioLogin;
-  let password = req.body.usuarioSenha;
-
-  user.findOne({where:{login: login}}).then(user1 => {
-      if(user != undefined){
-          let correct = bcrypt.compareSync(password,user.password);
-          if(correct){
-             res.redirect("/home");
-          }else{
-              res.redirect("/");
-          }
-      }else{
-          res.redirect("/");
-      }
-  });
+  let login = req.body.login;
+  let password = req.body.password;
+  console.log(login, password)
+user.findOne({ where: {usuarioLogin: login}
+  },(err, login) =>{
+    if(!user){
+      console.log("Usuário não encontrado" + login)
+    }
+    let correct = bcrypt.compareSync(password,user.usuarioSenha)
+    if(correct) res.redirect("/home")
+  })
 });
-
-
-
-
 module.exports = userRouter;
