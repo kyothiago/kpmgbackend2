@@ -1,11 +1,11 @@
 const Router = require("express");
-//const crypto = require('crypto');
+var jwt = require("jsonwebtoken");
 const userRouter = Router();
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 const user = require("../model/User");
+const secret = "authformulaone";
 
 userRouter.post("/add", (req, res) => {
-
   let password = req.body.password;
   let email = req.body.email;
 
@@ -18,13 +18,15 @@ userRouter.post("/add", (req, res) => {
       usuarioNome: req.body.name,
       usuarioEmail: req.body.email,
       usuarioSenha: hash,
-      usuarioCelular: req.body.celular
+      usuarioCelular: req.body.celular,
     })
     .then((dados) => {
       res.status(200).send(dados);
     })
-    .catch(() => {
-      res.status(400).send("Ocorreu um erro");
+    .catch((error) => {
+      res
+        .status(400)
+        .json({ message: "Ocorreu um erro na criação do usuário", error });
     });
 });
 
@@ -65,19 +67,29 @@ userRouter.delete("/delete/:id", (req, res) => {
     });
 });
 
- 
-userRouter.post("/authenticate", (req, res) => { 
-
+userRouter.post("/authenticate", async (req, res) => {
   let login = req.body.login;
   let password = req.body.password;
-  console.log(login, password)
-user.findOne({ where: {usuarioLogin: login}
-  },(err, login) =>{
-    if(!user){
-      console.log("Usuário não encontrado" + login)
-    }
-    let correct = bcrypt.compareSync(password,user.usuarioSenha)
-    if(correct) res.redirect("/home")
-  })
+
+  const userFinded = await user.findOne({ where: { usuarioLogin: login } });
+
+  let correct = bcrypt.compareSync(
+    password,
+    userFinded.dataValues.usuarioSenha
+  );
+
+  if (!correct) {
+    res.status(401).json({ message: "Usuário não autorizado!" });
+  }
+
+  const token = jwt.sign(
+    {
+      data: userFinded.dataValues.usuarioId,
+    },
+    secret,
+    { expiresIn: "1h" }
+  );
+
+  res.status(200).json({ token: token });
 });
 module.exports = userRouter;
