@@ -15,7 +15,6 @@ circuitRouter.post("/add", (req, res) => {
       circuitoLocalizacao: req.body.local,
       circuitoPais: req.body.country,
       circuitoUrl: req.body.urlCircuit,
-      circuitoUrl: req.body.time,
       circuitoFoto: req.body.foto,
     })
     .then((dados) => {
@@ -26,18 +25,37 @@ circuitRouter.post("/add", (req, res) => {
     });
 });
 
-circuitRouter.delete("/delete/:id", (req, res) => {
+circuitRouter.delete("/delete/:id", async (req, res) => {
   Circuit
-    .destroy({
-      where: { id: req.params.id },
+    .findOneAndDelete({
+      where: { circuitoId: req.params.id }
     })
     .then((dados) => {
-      res.status(200).send(dados);
+      res.status(200).send((dados).toString());
     })
     .catch(() => {
       res.status(400).send("Ocorreu um erro");
     });
 });
+
+/* circuitRouter.get("/edit/:id", (req, res) =>{
+
+  let id = req.params.id;
+
+  if(isNaN(id)){
+      res.redirect("/home");
+  }
+  Circuit.findByPk(id).then(category => {
+      if(category != undefined){
+          res.render("/edit", {category: category});
+
+      }else{
+          res.redirect("/home");
+      }
+    }).catch(erro =>{
+      res.redirect("/home");
+    })
+}); */
 
 circuitRouter.get("/get", (req, res) => {
   Circuit
@@ -59,6 +77,7 @@ const storage = multer.diskStorage({
     cb(null, fullName);
   },
 });
+
 const upload = multer({
   storage: storage,
   limits: { fileSize: 2000000 }, // file size two milion bytes are allowed

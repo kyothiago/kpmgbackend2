@@ -3,15 +3,18 @@ const jwt = require("jsonwebtoken");
 const userRouter = Router();
 const bcrypt = require("bcryptjs");
 const user = require("../model/User");
+const verifyJWT = require("../../middlewares/jwtmidle");
 const secret = "authformulaone";
 
-userRouter.post("/add", (req, res) => {
+userRouter.post("/add", async (req, res) => {
+
+  let login = req.body.login;
+  const userFinded = await user.findOne({ where: { usuarioLogin: login } })
+  if(!userFinded){
   let password = req.body.password;
-  let email = req.body.email;
 
   let salt = bcrypt.genSaltSync(10);
   let hash = bcrypt.hashSync(password, salt);
-
   user
     .create({
       usuarioLogin: req.body.login,
@@ -28,9 +31,11 @@ userRouter.post("/add", (req, res) => {
         .status(400)
         .json({ message: "Ocorreu um erro na criação do usuário", error });
     });
-});
-
-userRouter.put("/:id", (req, res) => {
+}else{
+  return console.log("Usuário já cadastrado");
+}
+})
+userRouter.put("/:id", verifyJWT, (req, res) => {
   user
     .update(
       {
