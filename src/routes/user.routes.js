@@ -89,7 +89,6 @@ userRouter.post("/authenticate", async (req, res) => {
   if (!correct) {
     res.status(401).json({ message: "Usuário não autorizado!" });
   }
-
   const token = jwt.sign(
     {
       data: userFinded.dataValues.usuarioId,
@@ -106,6 +105,7 @@ userRouter.post("/authenticate", async (req, res) => {
   );
   const response = {
     "status": "Logged in",
+    "id": userFinded.dataValues.usuarioId,
     "token": token,
     "refreshToken": refreshToken,
 }

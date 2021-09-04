@@ -27,7 +27,7 @@ const Circuit = connection.define('circuitos', {
 
     circuitoPais:{
         type: Sequelize.DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
 
     circuitoLatitude:{
@@ -59,7 +59,6 @@ const Circuit = connection.define('circuitos', {
         freezeTableName: true,
         timestamps: false
     }
-
 );
 
 //Circuit.sync({force: true});
