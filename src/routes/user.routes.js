@@ -3,8 +3,10 @@ const jwt = require("jsonwebtoken");
 const userRouter = Router();
 const bcrypt = require("bcryptjs");
 const user = require("../model/User");
-const verifyJWT = require("../../middlewares/jwtmidle");
+const verifyJWT = require("../middlewares/jwtmidle");
 const secret = "authformulaone";
+const refreshsecret = "authrefresh"
+const tokenList = {};
 
 userRouter.post("/add", async (req, res) => {
 
@@ -23,6 +25,7 @@ userRouter.post("/add", async (req, res) => {
       usuarioSenha: hash,
       usuarioCelular: req.body.celular,
     })
+
     .then((dados) => {
       res.status(200).send(dados);
     })
@@ -92,9 +95,22 @@ userRouter.post("/authenticate", async (req, res) => {
       data: userFinded.dataValues.usuarioId,
     },
     secret,
-    { expiresIn: "1h" }
+    { expiresIn: "3m" }
   );
-
-  res.status(200).json({ token: token });
+  const refreshToken = jwt.sign(
+    {
+      data: userFinded.dataValues.usuarioId
+    },
+    refreshsecret,
+   { expiresIn: "3m"}
+  );
+  const response = {
+    "status": "Logged in",
+    "token": token,
+    "refreshToken": refreshToken,
+}
+  tokenList[refreshToken] = response
+    res.status(200).json(response);
 });
+userRouter.use(require('../middlewares/jwtmidle'))
 module.exports = userRouter;
