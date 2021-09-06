@@ -38,8 +38,8 @@ userRouter.post("/add", async (req, res) => {
   return console.log("Usuário já cadastrado");
 }
 })
-userRouter.put("/:id", verifyJWT, (req, res) => {
-  user
+userRouter.put("/:id", async (req, res) => {
+  await user
     .update(
       {
         usuarioLogin: req.body.login,
@@ -50,7 +50,7 @@ userRouter.put("/:id", verifyJWT, (req, res) => {
       },
       {
         where: {
-          usuarioId: req.body.usuarioId,
+          usuarioId: req.params.id,
         },
       }
     )
@@ -112,16 +112,17 @@ userRouter.post("/authenticate", async (req, res) => {
   tokenList[refreshToken] = response
     res.status(200).json(response);
 });
-userRouter.use(require('../middlewares/jwtmidle'))
-module.exports = userRouter;
 
-userRouter.get("/:id", verifyJWT, (req, res) => {
+userRouter.get("/:id", async (req, res) => {
   let id = req.params.id;
-  Circuit.findOne({ where: { usuarioId: id } })
-    .then((dados) => {
-      res.json(dados);
+  await user.findOne({ where: { usuarioId: id } })
+    .then((data) => {
+      res.json(data);
     })
     .catch((erro) => {
       res.status(400).json({ message: "ocorreu um erro", erro });
     });
 });
+
+userRouter.use(require('../middlewares/jwtmidle'))
+module.exports = userRouter;

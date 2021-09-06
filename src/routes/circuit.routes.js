@@ -110,13 +110,14 @@ circuitRouter.post(
 );
 
 circuitRouter.post("/add", upload.single("photo"), async (req, res, next) => {
+  const photo = "public/uploads/" + req.file.filename
   await Circuit.create({
     circuitoRef: req.body.nameCircuit,
     circuitoNome: req.body.nameCircuit,
     circuitoLocalizacao: req.body.local,
     circuitoPais: req.body.country,
     circuitoUrl: req.body.urlCircuit,
-    circuitoFoto: req.file.path,
+    circuitoFoto: photo,
   })
     .then((dados) => {
       console.log("deu certo");
@@ -128,11 +129,11 @@ circuitRouter.post("/add", upload.single("photo"), async (req, res, next) => {
     });
 });
 
-circuitRouter.get("/:id", (req, res) => {
+circuitRouter.get("/:id", async (req, res) => {
   let id = req.params.id;
-  Circuit.findOne({ where: { circuitId: id } })
-    .then((dados) => {
-      res.json(dados);
+  await Circuit.findOne({ where: { circuitoId: id } })
+    .then((data) => {
+      res.json(data);
     })
     .catch((erro) => {
       res.status(400).json({ message: "ocorreu um erro", erro });
