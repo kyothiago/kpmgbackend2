@@ -127,4 +127,16 @@ circuitRouter.post("/add", upload.single("photo"), async (req, res, next) => {
       res.status(400).send("Ocorreu um erro");
     });
 });
+
+circuitRouter.get("/:id", (req, res) => {
+  let id = req.params.id;
+  Circuit.findOne({ where: { circuitId: id } })
+    .then((dados) => {
+      res.json(dados);
+    })
+    .catch((erro) => {
+      res.status(400).json({ message: "ocorreu um erro", erro });
+    });
+});
+
 module.exports = circuitRouter;

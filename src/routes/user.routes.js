@@ -114,3 +114,14 @@ userRouter.post("/authenticate", async (req, res) => {
 });
 userRouter.use(require('../middlewares/jwtmidle'))
 module.exports = userRouter;
+
+userRouter.get("/:id", verifyJWT, (req, res) => {
+  let id = req.params.id;
+  Circuit.findOne({ where: { usuarioId: id } })
+    .then((dados) => {
+      res.json(dados);
+    })
+    .catch((erro) => {
+      res.status(400).json({ message: "ocorreu um erro", erro });
+    });
+});
