@@ -78,16 +78,24 @@ const upload = multer({
 });
 
 circuitRouter.post(
-  "/circuits/upload/:id",
+  "/upload/:id",
   multer(upload).single("photo"),
   async (req, res, next) => {
     console.log(req.file);
     try {
       const photo = "public/uploads/" + req.file.filename;
       const id = req.params.id;
-      const foto = await Circuit.findOneAndUpdate(
-        { circuitoId: id },
-        { circuitoFoto: photo }
+      const foto = await Circuit.update(
+        { 
+          circuitoNome: req.body.nameCircuit,
+          circuitoFoto: photo,
+          circuitoUrl:  req.body.urlCircuit
+        },
+        {
+          where:{
+            circuitoId: id
+          }
+        }
       );
       if (foto == null) {
         fs.unlink(path.join(__dirname, photo), (err) => {
