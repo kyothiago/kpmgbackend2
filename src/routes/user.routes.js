@@ -38,14 +38,19 @@ userRouter.post("/add", async (req, res) => {
   return console.log("Usuário já cadastrado");
 }
 })
+
 userRouter.put("/:id", async (req, res) => {
+  let password = req.body.password;
+
+  let salt = bcrypt.genSaltSync(10);
+  let hash = bcrypt.hashSync(password, salt);
   await user
     .update(
       {
         usuarioLogin: req.body.login,
         usuarioNome: req.body.name,
         usuarioEmail: req.body.email,
-        usuarioSenha: req.body.password,
+        usuarioSenha: hash,
         usuarioCelular: req.body.celular,
       },
       {
