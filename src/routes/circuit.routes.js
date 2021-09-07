@@ -3,11 +3,12 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
+const verifyJWT = require("../middlewares/jwtmidle");
 const circuitRouter = Router();
 
 const Circuit = require("../model/Circuit");
 
-circuitRouter.delete("/delete/:id", async (req, res) => {
+circuitRouter.delete("/delete/:id", verifyJWT, async (req, res) => {
   Circuit.destroy({
     where: { circuitoId: req.params.id },
   })
@@ -38,7 +39,7 @@ circuitRouter.delete("/delete/:id", async (req, res) => {
     })
 }); */
 
-circuitRouter.get("/get", (req, res) => {
+circuitRouter.get("/get", verifyJWT, (req, res) => {
   Circuit.findAll()
     .then((dados) => {
       res.json(dados);
@@ -117,7 +118,7 @@ circuitRouter.post(
   }
 );
 
-circuitRouter.post("/add", upload.single("photo"), async (req, res, next) => {
+circuitRouter.post("/add", verifyJWT, upload.single("photo"), async (req, res, next) => {
   const photo = "public/uploads/" + req.file.filename
   await Circuit.create({
     circuitoRef: req.body.nameCircuit,
@@ -137,7 +138,7 @@ circuitRouter.post("/add", upload.single("photo"), async (req, res, next) => {
     });
 });
 
-circuitRouter.get("/:id", async (req, res) => {
+circuitRouter.get("/:id", verifyJWT, async (req, res) => {
   let id = req.params.id;
   await Circuit.findOne({ where: { circuitoId: id } })
     .then((data) => {
