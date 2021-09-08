@@ -11,9 +11,9 @@ function refreshJWT(req,res,next) {
             jwt.verify(refreshtoken, refreshsecret, function (err,decoded){
                 if(err){
                 return res.status(401).json({"error": true, "message": 'token inválido' });
-            }
-            req.decoded = decoded; 
-            let token = jwt.sign(
+              }
+              req.decoded = decoded; 
+              let token = jwt.sign(
                 {
                   data: decoded.data,
                 },
@@ -25,18 +25,18 @@ function refreshJWT(req,res,next) {
                   data: decoded.data,
                 },
                 refreshsecret,
-               { expiresIn: "1m"}
+               { expiresIn: "2m"}
               );
               const response = {
                 "status": "Logged in",
                 "id": decoded.data,
                 "token": token,
                 "refreshToken": refreshToken,
-            }
-            tokenList[refreshToken] = response
-            res.status(200).json(response);
+              }
+              tokenList[refreshToken] = response
+              res.status(200).json(response);
                 
-            })
+              })
         }
       
       next();

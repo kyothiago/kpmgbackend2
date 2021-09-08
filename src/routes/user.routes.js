@@ -106,7 +106,7 @@ userRouter.post("/authenticate", async (req, res) => {
       data: userFinded.dataValues.usuarioId
     },
     refreshsecret,
-   { expiresIn: "1m"}
+   { expiresIn: "2m"}
   );
   const response = {
     "status": "Logged in",

@@ -9,10 +9,10 @@ const routes = Router();
 routes.use("/user", userRouter);
 routes.use("/circuit", circuitRouter);
 
-routes.post("/auth",  refreshJWT, (req, res) =>{
-    res.sendStatus(200);
-});
+const res = routes.post("/auth",  refreshJWT /* async (res, req) => {
+    return await 
+} */);
 
-module.exports = routes;
+module.exports = routes; 
 
 
