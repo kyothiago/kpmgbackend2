@@ -20,27 +20,9 @@ circuitRouter.delete("/delete/:id", verifyJWT, async (req, res) => {
     });
 });
 
-/* circuitRouter.get("/edit/:id", (req, res) =>{
 
-  let id = req.params.id;
-
-  if(isNaN(id)){
-      res.redirect("/home");
-  }
-  Circuit.findByPk(id).then(category => {
-      if(category != undefined){
-          res.render("/edit", {category: category});
-
-      }else{
-          res.redirect("/home");
-      }
-    }).catch(erro =>{
-      res.redirect("/home");
-    })
-}); */
-
-circuitRouter.get("/get", verifyJWT, (req, res) => {
-  Circuit.findAll()
+circuitRouter.get("/get", verifyJWT, async (req, res) => {
+  await Circuit.findAll()
     .then((dados) => {
       res.json(dados);
     })
@@ -79,7 +61,7 @@ const upload = multer({
 });
 
 circuitRouter.post(
-  "/upload/:id",
+  "/upload/:id", verifyJWT,
   multer(upload).single("photo"),
   async (req, res, next) => {
     console.log(req.file);
@@ -138,7 +120,7 @@ circuitRouter.post("/add", verifyJWT, upload.single("photo"), async (req, res, n
     });
 });
 
-circuitRouter.get("/:id", verifyJWT, async (req, res) => {
+circuitRouter.get("/:id", verifyJWT,async (req, res) => {
   let id = req.params.id;
   await Circuit.findOne({ where: { circuitoId: id } })
     .then((data) => {

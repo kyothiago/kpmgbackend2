@@ -67,7 +67,7 @@ userRouter.put("/:id",verifyJWT, async (req, res) => {
     });
 });
 
-userRouter.delete("/delete/:id", (req, res) => {
+userRouter.delete("/delete/:id", verifyJWT, (req, res) => {
   user
     .destroy({
       where: { id: req.params.id },
@@ -80,7 +80,7 @@ userRouter.delete("/delete/:id", (req, res) => {
     });
 });
 
-userRouter.post("/authenticate",verifyJWT, async (req, res) => {
+userRouter.post("/authenticate", async (req, res) => {
   let login = req.body.login;
   let password = req.body.password;
 
@@ -99,14 +99,14 @@ userRouter.post("/authenticate",verifyJWT, async (req, res) => {
       data: userFinded.dataValues.usuarioId,
     },
     secret,
-    { expiresIn: "3m" }
+    { expiresIn: "1m" }
   );
   const refreshToken = jwt.sign(
     {
       data: userFinded.dataValues.usuarioId
     },
     refreshsecret,
-   { expiresIn: "3m"}
+   { expiresIn: "1m"}
   );
   const response = {
     "status": "Logged in",

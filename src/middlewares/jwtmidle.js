@@ -9,7 +9,8 @@ module.exports = (req,res,next) => {
             return res.status(401).json({"error": true, "message": 'Sem acesso autorizado' });
         }
       req.decoded = decoded;
-      next();c
+      console.log(decoded);
+      next();
     });
   } else {
     return res.status(403).send({
