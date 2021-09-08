@@ -72,7 +72,6 @@ circuitRouter.post(
     try {
       const photo = "public/uploads/" + req.file.filename;
       const id = req.params.id;
-      const foto = req.file.filename;
       await Circuit.update(
         { 
           circuitoNome: req.body.nameCircuit,
@@ -85,16 +84,8 @@ circuitRouter.post(
           }
         }
       );
-      if (foto == undefined) {
-        fs.unlink(path.join(__dirname, photo), (err) => {
-          if (err) throw err;
-          else res.status(404).json({ success: false, err });
-        });
-        return;
-      }
       res.json({
-        success: true,
-        foto,
+        success: true
       });
     } catch (err) {
       res.status(500).json({
