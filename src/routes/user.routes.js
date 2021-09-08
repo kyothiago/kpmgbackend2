@@ -39,7 +39,7 @@ userRouter.post("/add", async (req, res) => {
 }
 })
 
-userRouter.put("/:id", async (req, res) => {
+userRouter.put("/:id",verifyJWT, async (req, res) => {
   let password = req.body.password;
 
   let salt = bcrypt.genSaltSync(10);
@@ -80,7 +80,7 @@ userRouter.delete("/delete/:id", (req, res) => {
     });
 });
 
-userRouter.post("/authenticate", async (req, res) => {
+userRouter.post("/authenticate",verifyJWT, async (req, res) => {
   let login = req.body.login;
   let password = req.body.password;
 
@@ -118,7 +118,7 @@ userRouter.post("/authenticate", async (req, res) => {
     res.status(200).json(response);
 });
 
-userRouter.get("/:id", async (req, res) => {
+userRouter.get("/:id", verifyJWT, async (req, res) => {
   let id = req.params.id;
   await user.findOne({ where: { usuarioId: id } })
     .then((data) => {
