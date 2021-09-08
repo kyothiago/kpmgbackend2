@@ -64,7 +64,7 @@ const upload = multer({
   limits: { fileSize: 2 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     //checar a extensão do arquivo original se é igual a determinada no fileTypes (tipos de arquivos)
-    const fileTypes = /png|jpeg|jpg/;
+    const fileTypes = /png|PNG|jpeg|JPEG|jpg|JPG/;
     const extName = fileTypes.test(path.extname(file.originalname));
     file.originalname.toLowerCase();
     //checa se o tamanho do arquivo em bytes é maior do que o limite
