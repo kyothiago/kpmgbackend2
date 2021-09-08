@@ -59,14 +59,9 @@ const upload = multer({
     }
   },
 });
-function funcupload(req, res, next) {
-  if(req.file !=undefined){
-  upload.single("photo")}
-  next()
-}
 
 circuitRouter.post(
-  "/upload/:id", verifyJWT, funcupload,
+  "/upload/:id", verifyJWT, upload.single("photo"),
   async (req, res, next) => {
     
     try {
