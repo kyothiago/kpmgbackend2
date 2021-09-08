@@ -118,7 +118,7 @@ userRouter.post("/authenticate", async (req, res) => {
     res.status(200).json(response);
 });
 
-userRouter.get("/:id", verifyJWT, async (req, res) => {
+userRouter.get("/:id", async (req, res) => {
   let id = req.params.id;
   await user.findOne({ where: { usuarioId: id } })
     .then((data) => {
