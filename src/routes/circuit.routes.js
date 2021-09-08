@@ -59,16 +59,21 @@ const upload = multer({
     }
   },
 });
+function funcupload(req, res, next) {
+  if(req.file !=undefined){
+  upload.single("photo")}
+  next()
+}
 
 circuitRouter.post(
-  "/upload/:id", verifyJWT,
-  multer(upload).single("photo"),
+  "/upload/:id", verifyJWT, funcupload,
   async (req, res, next) => {
-    console.log(req.file);
+    
     try {
       const photo = "public/uploads/" + req.file.filename;
       const id = req.params.id;
-      const foto = await Circuit.update(
+      const foto = req.file.filename;
+      await Circuit.update(
         { 
           circuitoNome: req.body.nameCircuit,
           circuitoFoto: photo,
@@ -80,7 +85,7 @@ circuitRouter.post(
           }
         }
       );
-      if (foto == null) {
+      if (foto == undefined) {
         fs.unlink(path.join(__dirname, photo), (err) => {
           if (err) throw err;
           else res.status(404).json({ success: false, err });
@@ -120,7 +125,7 @@ circuitRouter.post("/add", verifyJWT, upload.single("photo"), async (req, res, n
     });
 });
 
-circuitRouter.get("/:id", verifyJWT,async (req, res) => {
+circuitRouter.get("/:id", verifyJWT, async (req, res) => {
   let id = req.params.id;
   await Circuit.findOne({ where: { circuitoId: id } })
     .then((data) => {

@@ -19,7 +19,7 @@ const salvarCircuitos = require("./controller/circuitController");
 app.listen(3001, () => {
   console.log("servidor iniciado na porta 3001");
 });
-
+//códigos para mapear as tabelas da api na nossa database.
 //salvarTemporada();
 //salvarCircuitos();
 //salvarCorridas();

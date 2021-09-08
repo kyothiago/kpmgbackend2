@@ -83,9 +83,9 @@ userRouter.delete("/delete/:id", verifyJWT, (req, res) => {
 userRouter.post("/authenticate", async (req, res) => {
   let login = req.body.login;
   let password = req.body.password;
-
+  if(login != undefined || password != undefined){
   const userFinded = await user.findOne({ where: { usuarioLogin: login } });
-
+  if(userFinded != undefined){
   let correct = bcrypt.compareSync(
     password,
     userFinded.dataValues.usuarioSenha
@@ -116,7 +116,10 @@ userRouter.post("/authenticate", async (req, res) => {
 }
   tokenList[refreshToken] = response
     res.status(200).json(response);
-});
+}
+  else{
+    res.status(403).json({ message: "Usuário não encontrado"})
+ }}});
 
 userRouter.get("/:id", async (req, res) => {
   let id = req.params.id;
